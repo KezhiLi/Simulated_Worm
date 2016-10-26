@@ -2,13 +2,8 @@
 % 5 eigen coefficients
 % 1 difference of mean of the absolute angle (after adjusted)
 
-% hdf5_file_name = 'Z:\Results\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\800 MY16 on food L_2011_03_03__16_52___3___11_skeletons.hdf5';
-% masked_image_file =  'Z:\MaskedVideos\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\800 MY16 on food L_2011_03_03__16_52___3___11.hdf5';
-hdf5_file_name = 'Z:\Results\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\247 JU438 on food L_2011_03_03__11_18___3___1_skeletons.hdf5';
-masked_image_file =  'Z:\MaskedVideos\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\247 JU438 on food L_2011_03_03__11_18___3___1.hdf5';
-
-
-
+hdf5_file_name = 'Z:\Results\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\800 MY16 on food L_2011_03_03__16_52___3___11_skeletons.hdf5';
+masked_image_file =  'Z:\MaskedVideos\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\800 MY16 on food L_2011_03_03__16_52___3___11.hdf5';
 
 ske_info = h5info(hdf5_file_name, '/skeleton');
 frame_size = ske_info.Dataspace.Size(1:2);
@@ -63,6 +58,7 @@ end
 mean_angle_vec = mean(angle_vec);
 diff_mean_angle_vec =[mean_angle_vec(1) ,mean_angle_vec(2:end) - mean_angle_vec(1:end-1)];
 
+
 angle_vec_adj = angle_vec - kron(ones(size(angle_vec,1),1),mean_angle_vec);
 
 %I am going to do different number of eigenvalues though.
@@ -83,7 +79,13 @@ for i=1:n
         'stabilization', 'on', 'lasteig', lasteig(1,i));
 end
 
-eig_coef = [icasig{n};diff_mean_angle_vec];
+%give weights
+icasig_n = icasig{n};
+icasig_n(1,:) = icasig_n(1,:)*2;
+icasig_n(2,:) = icasig_n(2,:)*2;
+
+
+eig_coef = [icasig_n;diff_mean_angle_vec];
 eig_vec = A{n};
 
 % %% debug use: show figure using components
@@ -103,19 +105,19 @@ eig_vec = A{n};
 %        % mov(ii) = save_crt_fra(filename_gif,ii, fps);
 %     end
     
-
+% 
 % %% generate data
 % % save('angle_vec.mat','angle_vec');
 % % save('angle_vec.xlsx','angle_vec');
 % % 
 % save_path = 'C:\Users\kezhili\Documents\Python Scripts\data\';
-% h5create([save_path,'eig_para_full21(247JU438).hdf5'], '/eig_coef', size(eig_coef), 'Datatype', 'double', ...
+% h5create([save_path,'eig_para_full24.hdf5'], '/eig_coef', size(eig_coef), 'Datatype', 'double', ...
 %     'Chunksize', size(eig_coef), 'Deflate', 5, 'Fletcher32', true, 'Shuffle', true)
-% h5write([save_path,'eig_para_full21(247JU438).hdf5'], '/eig_coef', eig_coef);
-% h5create([save_path,'eig_para_full21(247JU438).hdf5'], '/eig_vec', size(eig_vec), 'Datatype', 'double', ...
+% h5write([save_path,'eig_para_full24.hdf5'], '/eig_coef', eig_coef);
+% h5create([save_path,'eig_para_full24.hdf5'], '/eig_vec', size(eig_vec), 'Datatype', 'double', ...
 %     'Chunksize', size(eig_vec), 'Deflate', 5, 'Fletcher32', true, 'Shuffle', true)
-% h5write([save_path,'eig_para_full21(247JU438).hdf5'], '/eig_vec', eig_vec);
-% h5create([save_path,'eig_para_full21(247JU438).hdf5'], '/len_vec', size(len_vec), 'Datatype', 'double', ...
+% h5write([save_path,'eig_para_full24.hdf5'], '/eig_vec', eig_vec);
+% h5create([save_path,'eig_para_full24.hdf5'], '/len_vec', size(len_vec), 'Datatype', 'double', ...
 %     'Chunksize', size(len_vec), 'Deflate', 5, 'Fletcher32', true, 'Shuffle', true)
-% h5write([save_path,'eig_para_full21(247JU438).hdf5'], '/len_vec', len_vec);
+% h5write([save_path,'eig_para_full24.hdf5'], '/len_vec', len_vec);
 

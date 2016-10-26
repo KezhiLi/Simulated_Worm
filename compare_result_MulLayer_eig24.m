@@ -1,4 +1,5 @@
 % 5 dimensions + 1 DiffOfMeanofAbsAngles
+% give first 2 dimensions double weights
 
 addpath('X:\Kezhi\fastICA');
 
@@ -6,15 +7,18 @@ addpath('X:\Kezhi\fastICA');
 fps = 5;
 
 
-csv_predicted = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_predicted_full21(247JU438)-1hid.csv';
+csv_predicted = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_predicted_full24.csv';
 predicted = csvread(csv_predicted);
-csv_y_test = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_y_test_full21(247JU438)-1hid.csv';
+predicted(:,1:2) = predicted(:,1:2)/2;
+csv_y_test = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_y_test_full24.csv';
 y_test = csvread(csv_y_test);
-csv_generated = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_generated_full21(247JU438)-1hid.csv';
+y_test(:,1:2) = y_test(:,1:2)/2;
+csv_generated = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_generated_full24.csv';
 generated_ske = csvread(csv_generated);
+generated_ske(:,1:2) = generated_ske(:,1:2)/2;
 
-load_path = 'C:\Users\kezhili\Documents\Python Scripts\data\';
-eig_vec_file = 'eig_para_full21(247JU438)-1hid.hdf5';
+ load_path = 'C:\Users\kezhili\Documents\Python Scripts\data\';
+eig_vec_file = 'eig_para_full24.hdf5';
 eig_vec = h5read([load_path,eig_vec_file],'/eig_vec'); 
 %eig_vec = A{n};
 len_vec = h5read([load_path,eig_vec_file],'/len_vec'); 
@@ -23,7 +27,7 @@ len_vec = h5read([load_path,eig_vec_file],'/len_vec');
 % ori_data = h5read([load_path,eig_vec_file],'/eig_coef'); 
 % ori_data_test = (ori_data(:,round(size(ori_data,2)-size(y_test,1))+1:end))';
 % y_test = ori_data_test;
-
+% y_test(:,1:2) = y_test(:,1:2)/2;
 
 FirstNoFrm = length(mean_angle_vec)-size(y_test,1);
 FirstAbsAng = mean_angle_vec(FirstNoFrm);
@@ -33,7 +37,7 @@ for tt = 3;
         eig_radias_vec = predicted(:,1:end-1);
         mean_angle_vec_diff = predicted(:,end);
         mean_angle_vec_cur = (mean_angle_vec(FirstNoFrm:end-1))'+mean_angle_vec_diff;
-        filename_gif = 'C:\Kezhi\MyCode!!!\Simulated_Worm\eig_1(247JU438).gif';
+        filename_gif = 'C:\Kezhi\MyCode!!!\Simulated_Worm\eig_1(24).gif';
         
         eig_radias_vec2 = y_test(:,1:end-1);
         mean_angle_vec_diff2 = y_test(:,end);
@@ -42,17 +46,18 @@ for tt = 3;
 
     elseif tt ==2
     %    eig_radias_vec = icasig{n};
+    
         eig_radias_vec = y_test(:,1:end-1);
         mean_angle_vec_diff = y_test(:,end);
         mean_angle_vec_diff(1) = mean_angle_vec_diff(1) + FirstAbsAng;
         mean_angle_vec_cur = cumsum(mean_angle_vec_diff);
-        filename_gif = 'C:\Kezhi\MyCode!!!\Simulated_Worm\eig_2(247JU438).gif';
+        filename_gif = 'C:\Kezhi\MyCode!!!\Simulated_Worm\eig_2(24).gif';
     elseif tt == 3
         eig_radias_vec = generated_ske(:,1:end-1);
         mean_angle_vec_diff = generated_ske(:,end);
         mean_angle_vec_diff(1) = mean_angle_vec_diff(1) + FirstAbsAng;
         mean_angle_vec_cur = cumsum(mean_angle_vec_diff);
-        filename_gif = 'C:\Kezhi\MyCode!!!\Simulated_Worm\eig_3(247JU438).gif';
+        filename_gif = 'C:\Kezhi\MyCode!!!\Simulated_Worm\eig_3(24).gif';
     end
    
     if size(eig_radias_vec,1)>size(eig_radias_vec,2)
@@ -108,8 +113,8 @@ for tt = 3;
             end
             hold off,
         end
-        axis equal
+       axis equal
         pause(0.15)
-        mov(ii) = save_crt_fra(filename_gif,ii, fps);
+   %     mov(ii) = save_crt_fra(filename_gif,ii, fps);
     end
 end

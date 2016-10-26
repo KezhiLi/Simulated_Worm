@@ -6,15 +6,15 @@ addpath('X:\Kezhi\fastICA');
 fps = 5;
 
 
-csv_predicted = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_predicted_full21(247JU438)-1hid.csv';
+csv_predicted = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_predicted_full21(247JU438).csv';
 predicted = csvread(csv_predicted);
-csv_y_test = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_y_test_full21(247JU438)-1hid.csv';
+csv_y_test = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_y_test_full21(247JU438).csv';
 y_test = csvread(csv_y_test);
-csv_generated = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_generated_full21(247JU438)-1hid.csv';
+csv_generated = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_generated_full21(247JU438).csv';
 generated_ske = csvread(csv_generated);
 
 load_path = 'C:\Users\kezhili\Documents\Python Scripts\data\';
-eig_vec_file = 'eig_para_full21(247JU438)-1hid.hdf5';
+eig_vec_file = 'eig_para_full21(247JU438).hdf5';
 eig_vec = h5read([load_path,eig_vec_file],'/eig_vec'); 
 %eig_vec = A{n};
 len_vec = h5read([load_path,eig_vec_file],'/len_vec'); 
@@ -110,6 +110,6 @@ for tt = 3;
         end
         axis equal
         pause(0.15)
-        mov(ii) = save_crt_fra(filename_gif,ii, fps);
+ %       mov(ii) = save_crt_fra(filename_gif,ii, fps);
     end
 end
