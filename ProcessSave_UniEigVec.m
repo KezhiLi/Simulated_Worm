@@ -2,6 +2,11 @@
 % 5 eigen coefficients
 % 1 difference of mean of the absolute angle (after adjusted)
 
+input_folder = 'Z:\single_worm\Results\nas207-3\Data\from pc207-15\*_skeletons.hdf5';
+
+eig_vec = h5read('Z:\DLWeights\eigenvector_nas207-1\eig_vec.hdf5', '/eig_vec');
+
+
 addpath('X:\Kezhi\fastICA');
 cur_path = 'C:\Users\kezhili\Documents\Python Scripts\';
 load_path = 'C:\Users\kezhili\Documents\Python Scripts\data\';
@@ -9,7 +14,7 @@ save_root = 'Z:\DLWeights\';
 
 % find all 'on food' file names
 %all_file_incSwim = subdir('Z:\Results\nas207-1\*_skeletons.hdf5');
-all_file_incSwim = subdir('Z:\Results\nas207-3\Data\from pc207-8\*_skeletons.hdf5');
+all_file_incSwim = subdir(input_folder);
 num_all_file = size(all_file_incSwim,1);
 NonSwimInd = [];
 jj = 1;
@@ -27,8 +32,6 @@ all_file = all_file_incSwim(NonSwimInd);
 
 time_step = 3;
 
-eig_vec = h5read('Z:\DLWeights\eigenvector_nas207-1\eig_vec.hdf5', '/eig_vec');
-        
 num_file = length(all_file);        
 %num_file = 1096;
 tt = 0;
@@ -134,11 +137,11 @@ for nf = 1:num_file; %42?  476
         %% generate data
 
         % save_path = 'C:\Users\kezhili\Documents\Python Scripts\data\';
-        save_path = [save_root,pathstr(12:end),'\',file_name(1:end-10)];
+        % 24 because delete first 24 letters, end-10 because of '_skeleton'
+        save_path = [save_root,pathstr(24:end),'\',file_name(1:end-10)];   
         
-        
-        if ~exist([save_root,pathstr(12:end)], 'dir')
-            mkdir([save_root,pathstr(12:end)]);
+        if ~exist([save_root,pathstr(24:end)], 'dir')
+            mkdir([save_root,pathstr(24:end)]);
         end
 
         if exist([save_path,'_eig.hdf5'])==2

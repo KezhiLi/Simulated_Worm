@@ -9,7 +9,8 @@
 % 21st Oct 2016, Kezhi Li, Copyright@Imperial College
 
 % cur_folder = 'Z:\DLWeights\test_files_folder\';
-cur_folder = 'C:\Users\kezhili\Documents\Python Scripts\data\FromAWS\7-200-200-200-200-7\07-03-11\600epochs\no_noise\';
+% cur_folder = 'C:\Users\kezhili\Documents\Python Scripts\data\FromAWS\7-200-200-200-7\';
+cur_folder = 'Z:\DLWeights\eig_catagory_Straits\wild-isolate\';
 
 addpath('X:\Kezhi\fastICA');
 addpath('X:\Andre\eric\RabetsEtAlModel - Copy\');
@@ -18,6 +19,8 @@ addpath(genpath('C:\Kezhi\MyCode!!!\Tracking\PF_Video_EN_Worm_Kezhi\PF_Video_EN\
 % find all .csv file names
 all_csv_file = subdir([cur_folder,'*.csv']);
 num_csv = size(all_csv_file,1);
+
+normalized_para = 5.5;  % 4.73
 
 for nf = 1:num_csv;  
     disp([num2str(nf),'/',num2str(num_csv)])
@@ -31,7 +34,8 @@ for nf = 1:num_csv;
     load_path = 'Z:\DLWeights\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\';
     eig_vec_file = '247 JU438 on food L_2011_03_03__11_18___3___1_eig.hdf5'; %1 
 
-    eig_vec = h5read([load_path,eig_vec_file],'/eig_vec'); 
+    %eig_vec = h5read([load_path,eig_vec_file],'/eig_vec'); 
+    eig_vec = h5read('Z:\DLWeights\eigenvector_nas207-1\eig_vec.hdf5','/eig_vec'); ;
     len_vec = h5read([load_path,eig_vec_file],'/len_vec'); 
     mean_angle_vec = h5read([load_path,eig_vec_file],'/mean_angle_vec'); 
 
@@ -111,7 +115,7 @@ for nf = 1:num_csv;
     t = 1:m_fre_pt ;
     seg_len = 8;
     ts = 1:1/(seg_len*2):m_fre_pt;
-    width = 10;
+    width = 9;
     
     all_skeletons = cell(1,no_frame);
     all_non_vulva_contours = cell(1,no_frame);
@@ -147,15 +151,15 @@ for nf = 1:num_csv;
         else
             half_ind = round(len_contour_tot/2)+1;
         end
-%         %% draw
+% %         %% draw
 %         plot(ske_pred_xy1(1:end),ske_pred_xy2(1:end),'LineWidth',2,'Color',[1 0.1 0.1]);
 %         hold on 
 %         plot(worm_shape_x(1:end),worm_shape_y(1:end),'LineWidth',2,'Color',[0.1 1 0.1]);
 
         %% set result variables
-        all_skeletons{nn} = single([ske_pred_xy1,ske_pred_xy2]);
-        all_non_vulva_contours{nn} = single([worm_shape_x(1:half_ind),worm_shape_y(1:half_ind)]);
-        all_vulva_contours{nn} = flip(single([worm_shape_x(half_ind:end),worm_shape_y(half_ind:end)]));
+        all_skeletons{nn} = single([ske_pred_xy1,ske_pred_xy2])*normalized_para;
+        all_non_vulva_contours{nn} = single([worm_shape_x(1:half_ind),worm_shape_y(1:half_ind)])*normalized_para;
+        all_vulva_contours{nn} = flip(single([worm_shape_x(half_ind:end),worm_shape_y(half_ind:end)]))*normalized_para;
       
 % calculate is_valid based on all_skeleton
         

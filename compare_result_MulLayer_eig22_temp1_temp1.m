@@ -7,24 +7,28 @@ addpath('X:\Kezhi\fastICA');
 fps = 5;
 
 
-csv_predicted = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_predicted_full22.csv';
+csv_predicted = 'C:\Users\kezhili\Documents\Python Scripts\data\wild_predicted_0.csv';
 %csv_predicted = 'Z:\DLWeights\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\247 JU438 on food L_2011_03_03__11_18___3___1_predicted-hid4.csv';
 predicted = csvread(csv_predicted);
-csv_y_test = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_y_test_full22.csv';
+csv_y_test = 'C:\Users\kezhili\Documents\Python Scripts\data\wild_y_test_0.csv';
 %csv_y_test = 'Z:\DLWeights\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\04-03-11\2_y_test_rev2.csv';
 y_test = csvread(csv_y_test);
 %csv_generated = 'C:\Users\kezhili\Documents\Python Scripts\data\eig_MulLayer_generated_full22.csv';
 %csv_generated = 'Z:\DLWeights_temp\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\247 JU438 on food L_2011_03_03__11_18___3___1_generated-hid4.csv';
 %csv_generated = 'Z:\DLWeights\nas207-1\experimentBackup\from pc207-18\!worm_videos\copied from pc207-13\misc_videos\robyn dvd\AQ2000 on food L_2011_05_19__16_42_00___1___12_eig(4hid).csv' ;
 
-csv_generated = 'C:\Users\kezhili\Documents\Python Scripts\data\FromAWS\test_res_2209_2016\muiltiFile_600epoch\round1\6_generated_long_noise1.csv';
-%csv_generated = 'Z:\DLWeights\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\1_relu_generated_1.csv';
+%csv_generated = 'C:\Users\kezhili\Documents\Python Scripts\data\FromAWS\test_res_2209_2016\muiltiFile_600epoch\round1\6_generated_long_noise1.csv';
+%csv_generated = 'Z:\DLWeights\eig_catagory_Straits\N2\N2 on food L_2011_02_24__12_21_07___7___1_eig_generated.csv';
+csv_generated = 'C:\Users\kezhili\Documents\Python Scripts\data\N2_generated_0.csv';
 generated_ske = csvread(csv_generated);
 
-% load_path = 'C:\Users\kezhili\Documents\Python Scripts\data\';
-% eig_vec_file = 'eig_para_full22.hdf5';
-load_path = 'Z:\DLWeights\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\';
-eig_vec_file = '247 JU438 on food L_2011_03_03__11_18___3___1_eig.hdf5'; %1 
+
+load_path = 'Z:\DLWeights\eig_catagory_Straits\N2\';
+eig_vec_file = 'N2 on food L_2011_02_24__12_21_07___7___1_eig.hdf5';
+%load_path = 'C:\Users\kezhili\Documents\Python Scripts\data\';
+%eig_vec_file = 'eig_para_full22.hdf5';
+%load_path = 'Z:\DLWeights\nas207-1\experimentBackup\from pc207-7\!worm_videos\copied_from_pc207-8\Andre\03-03-11\';
+%eig_vec_file = '247 JU438 on food L_2011_03_03__11_18___3___1_eig.hdf5'; %1 
 %eig_vec_file = '431 JU298 on food L_2011_03_03__12_29___3___5_eig.hdf5';%2
 %eig_vec_file = '764 ED3049 on food L_2011_03_03__15_44___3___7_eig.hdf5';%3 
 %eig_vec_file = '800 MY16 on food L_2011_03_03__16_52___3___11_eig.hdf5';%4
@@ -40,10 +44,13 @@ eig_vec_file = '247 JU438 on food L_2011_03_03__11_18___3___1_eig.hdf5'; %1
 eig_vec = h5read([load_path,eig_vec_file],'/eig_vec'); 
 %eig_vec = A{n};
 len_vec = h5read([load_path,eig_vec_file],'/len_vec'); 
+
+
 mean_angle_vec = h5read([load_path,eig_vec_file],'/mean_angle_vec'); 
 
 FirstNoFrm = length(mean_angle_vec)-size(y_test,1);
 FirstAbsAng = mean_angle_vec(FirstNoFrm);
+%FirstAbsAng =1;
 
 for tt = 3;
     if tt==1
@@ -79,7 +86,7 @@ for tt = 3;
         eig_radias_vec = eig_radias_vec';
     end
     
-    radias_vec=eig_vec*eig_radias_vec+ (kron(ones(1,size(eig_vec,1)), mean_angle_vec_cur))';
+    radias_vec=eig_vec*eig_radias_vec;+ (kron(ones(1,size(eig_vec,1)), mean_angle_vec_cur))';
 
     % radias to ske
     rho = median(len_vec,2);
@@ -113,28 +120,28 @@ for tt = 3;
 %     end
     
         
-%     % show the animation of skeleton 
-%     for ii = 1:size(pred_ske,3);
-%         if mod(ii,100)==0
-%             ii
+    % show the animation of skeleton 
+    for ii = 1:size(pred_ske,3);
+        if mod(ii,100)==0
+            ii
+        end
+        %img = zeros(480,640);
+        %plot(pred_ske(1,:,ii),480-pred_ske(2,:,ii),'*-');
+        plot(pred_ske(1,:,ii),pred_ske(2,:,ii),'r*-');
+%         if tt ==1
+%             hold on, 
+%             % real skeleton
+%             plot(pred_ske2(1,:,ii),pred_ske2(2,:,ii),'g*-');
+%             % last skeleton
+%             if ii>1
+%                 plot(pred_ske(1,:,ii-1),pred_ske2(2,:,ii-1),'y*-');
+%             end
+%             hold off,
 %         end
-%         %img = zeros(480,640);
-%         %plot(pred_ske(1,:,ii),480-pred_ske(2,:,ii),'*-');
-%         plot(pred_ske(1,:,ii),pred_ske(2,:,ii),'r*-');
-% %         if tt ==1
-% %             hold on, 
-% %             % real skeleton
-% %             plot(pred_ske2(1,:,ii),pred_ske2(2,:,ii),'g*-');
-% %             % last skeleton
-% %             if ii>1
-% %                 plot(pred_ske(1,:,ii-1),pred_ske2(2,:,ii-1),'y*-');
-% %             end
-% %             hold off,
-% %         end
-%     axis equal    
-% %      xlim([ min(min(pred_ske(1,:,:))), max(max(pred_ske(1,:,:)))])
-% %      ylim([ min(min(pred_ske(2,:,:))), max(max(pred_ske(2,:,:)))]) 
-%     pause(0.05)
-% %       mov(ii) = save_crt_fra(filename_gif,ii, fps);
-%     end
+    axis equal    
+%      xlim([ min(min(pred_ske(1,:,:))), max(max(pred_ske(1,:,:)))])
+%      ylim([ min(min(pred_ske(2,:,:))), max(max(pred_ske(2,:,:)))]) 
+    pause(0.05)
+%       mov(ii) = save_crt_fra(filename_gif,ii, fps);
+    end
 end
