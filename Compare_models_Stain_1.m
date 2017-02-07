@@ -11,7 +11,7 @@ stain = 'N2';    %
 
 %% run the algorithm
 %cur_folder = 'Z:\DLWeights\test_files_folder\';
-model_path = ['C:/Users/kezhili/Documents/Python Scripts/data/FromAWS/',stain,'/multiFile_',stain,'_newAWS_7-260-260-260-260-7_600ep.h5'];
+model_path = ['C:/Users/kezhili/Documents/Python Scripts/data/FromAWS/',stain,'/multiFile_',stain,'_7-260-260-260-260-7_600ep.h5'];
 %cur_folder_input = 'Z:/DLWeights/eig_catagory_Straits/ED3049/';
 cur_folder = ['Z:\DLWeights\eig_catagory_Straits\',stain,'\'];
 % 6 dimensions + 1 DiffOfMeanofAbsAngles
