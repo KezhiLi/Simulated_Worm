@@ -17,7 +17,8 @@ cur_folder = 'C:\Users\kezhili\Documents\Python Scripts\data\FromAWS\test_res_22
 % 6 dimensions + 1 DiffOfMeanofAbsAngles
 
 addpath('X:\Kezhi\fastICA');
-addpath('X:\Andre\eric\RabetsEtAlModel - Copy\');
+%addpath('X:\Andre\eric\RabetsEtAlModel - Copy\');
+addpath('C:\Kezhi\MyCode!!!\Simulated_Worm\Test_Eric\');
 
 fps = 5;
 
@@ -26,7 +27,7 @@ all_csv_file = subdir([cur_folder,'*.csv']);
 
 num_csv = size(all_csv_file,1);
 
-for nf = 1:num_csv;  % 476
+for nf = 5%1:num_csv;  % 476
     disp([num2str(nf),'/',num2str(num_csv)])
     csv_file_name = all_csv_file(nf).name
 
@@ -53,8 +54,9 @@ for nf = 1:num_csv;  % 476
         eig_radias_vec = eig_radias_vec';
     end
 
-    radias_vec=eig_vec*eig_radias_vec+ (kron(ones(1,size(eig_vec,1)), mean_angle_vec_cur))';
-
+    %radias_vec=eig_vec*eig_radias_vec+ (kron(ones(1,size(eig_vec,1)), mean_angle_vec_cur))';
+    radias_vec=eig_vec*eig_radias_vec;
+    
     % radias to ske
     rho = median(len_vec,2);
     pred_ske_diff = zeros(2,size(radias_vec,1),size(radias_vec,2));
@@ -91,21 +93,43 @@ for nf = 1:num_csv;  % 476
 
     % calculate arclength increment
     ds = 1/(size(X, 2)-1);
-
+    
     % calculate the observed rigid body motion
     [XCM, YCM, UX, UY, UXCM, UYCM, TX, TY, NX, NY, I, OMEG] = ...
         getRBM(X, Y, 1, ds, 1);
-
+    
     % subtract the observed rigid body motion
-    [DX, DY, ODX, ODY, VX, VY] = ...
-        subtractRBM(X, Y, XCM, YCM, UX, UY, UXCM, UYCM, OMEG);
-
+    [DX, DY, ODX, ODY, VX, VY, Xtil, Ytil, THETA] = ...
+        subtractRBM(X, Y, XCM, YCM, UX, UY, UXCM, UYCM, OMEG, 1);
+    
+    % rotate velocites and tangent angles to the worm frame of reference
+    [TX, TY] = lab2body(TX, TY, THETA);
+    [VX, VY] = lab2body(VX, VY, THETA);
+    
     % use model to predict rigid body motion
-    alpha = 86.1;
-    RBM = posture2RBM(TX, TY, DX, DY, VX, VY, 1, I, ds, alpha);
+    alpha = 100; % large alpha corresponds to no-slip during crawling
+    RBM = posture2RBM(TX, TY, Xtil, Ytil, VX, VY, 1, I, ds, alpha);
+    
+    % calculate the predicted rigid body motion
+    [XCMrecon, YCMrecon, THETArecon] = integrateRBM(RBM, 1, THETA);
+    
+    % add the rigid body motion to the skeleton coordinates
+    [Xrecon, Yrecon] = addRBMRotMat(Xtil, Ytil, XCMrecon, YCMrecon, ...
+        THETArecon, XCM, YCM, THETA);
+    
+    % plot a movie of worm with motion back in
+    for ii = 1:1:size(Xrecon,1) % only plotting every 10 frames to speed up movie
+        plot(Xrecon(ii, :)- Xrecon(1, 1), Yrecon(ii, :) - Yrecon(1, 1), 'Color', 'r')
+        hold on
+        plot(Xrecon(ii,1)- Xrecon(1, 1), Yrecon(ii, 1) - Yrecon(1, 1), '.', 'Color', 'b', 'MarkerSize', 15)
+        axis equal
+        xlim([ min(min(Xrecon - Xrecon(1, 1))), max(max(Xrecon - Xrecon(1, 1)))])
+        ylim([ min(min(Yrecon - Yrecon(1, 1))), max(max(Yrecon - Yrecon(1, 1)))])
 
-    % add the predicted rigid body motion back to the shifted skeletons
-    [VXmod, VYmod, Xrecon, Yrecon] = addRBMRot(DX, DY, VX, VY, RBM, 1);
+        hold off
+        pause(0.1) % forces refresh so you can see the plot
+    end
+%%
 
     figure, 
     plot(Xrecon(:, :)' - Xrecon(1, 1), Yrecon(:, :)' - Yrecon(1, 1), 'Color', 'r')
@@ -119,7 +143,7 @@ for nf = 1:num_csv;  % 476
  %   % save fig
  %   saveas(gcf,[csv_file_name(1:end-3),'fig'])
     % save png
-    print('-dpng', '-r600', strcat(csv_file_name(1:end-3),'png'));
+    print('-dpng', '-r600', strcat(csv_file_name(1:end-4),'-NoRotation.png'));
     close all
 
 end
