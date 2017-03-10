@@ -185,7 +185,7 @@ end
 subsample_step = 3;
 fea_timeseries_subs = fea_timeseries_all(:,1:subsample_step:end); 
 % abandon the NaN that have been abandoned previously
-fea_timeseries_subs_noNaN = fea_timeseries_subs(:,setdiff(1:size(fea_timeseries_subs,2),nan_idx));
+fea_timeseries_subs_noNaN = fea_timeseries_subs(setdiff(1:size(fea_timeseries_subs,2),nan_idx));
 % find the start index
 idx_timeseries = size(fea_timeseries_subs_noNaN,2)- size(c_L{1},2)+1;
 %idx_timeseries = length(fea_timeseries_subs_noNaN)*0.1+50;

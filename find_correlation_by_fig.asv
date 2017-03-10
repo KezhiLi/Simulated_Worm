@@ -1,15 +1,15 @@
 % find correlation by figures
-windowSize = 150;
+windowSize = 200;
 b = (1/windowSize)*ones(1,windowSize);
 a = 1;
 
 layer= 1;
-feature = 39; % 39: middle speed; 13: midbody bend
-for ii =  255 % 57:1:316;
-    figure, plot(comb_mtx_NaN0{layer}(feature,:),'r'),   % 3050:6700
+feature = 120; % 39: middle speed; 13: midbody bend
+for ii =  1% 57:1:316;
+    figure, plot(comb_mtx3_NaN0{layer}(feature,:),'r'),   % 3050:6700
     hold on,   
 %    plot(comb_mtx_NaN0{1}(43,5000:6000),'m'), 
-    plot(comb_mtx_NaN0{layer}(ii,:)) %3050:6700
+    plot(comb_mtx3_NaN0{layer}(ii,:)) %3050:6700
   %  axis([0,650,-5,5])
    
 %     figure, plot(comb_mtx_NaN0{layer}(feature,:),'r'), %4050:4700
