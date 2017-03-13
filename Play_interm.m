@@ -7,10 +7,12 @@
 
 % strain name
 stain =  'N2';
-cur_folder = ['Z:\DLWeights\eig_catagory_Straits\',stain,'\'];
 % the hdf5 file storages the c matrices
-strain_name =  'N2 on food L_2011_03_17__11_34_06___7___3';
-%'N2 on food L_2011_02_17__12_51_07___7___7';
+%strain_name =  'N2 on food L_2011_03_24__12_06_06___1___1';
+strain_name = 'N2 on food L_2011_03_17__11_34_06___7___3'; 
+% current folder
+cur_folder = ['Z:\DLWeights\eig_catagory_Straits\',stain,'\',strain_name,'\'];
+%'N2 on food L_2011_03_17__11_34_06___7___3';
 name = ['interm_',strain_name,'_eig_7-260-260-260-260-7_600ep.hdf5'];
 feature_name = [strain_name,'_features.hdf5'];
 hdf5_file_name = [cur_folder,name];
