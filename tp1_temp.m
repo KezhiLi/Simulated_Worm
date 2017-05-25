@@ -11,20 +11,21 @@ close
 scrsz = get(groot,'ScreenSize');
 figure('Position',[10 scrsz(4)/4 scrsz(3)/1.5 scrsz(4)/1.5])
 
+fold = sqrt(norm(comb_mtx_NaN0{layer}(feature,:)));
 subplot(6,1,1)
-plot(comb_mtx_NaN0{layer}(ii,1:5000)*2,'r');   % 3050:3200
+plot(comb_mtx_NaN0{layer}(ii,1:5000)*fold,'r');   % 3050:3200
 hold on, plot(comb_mtx_NaN0{layer}(feature,1:5000),'b');   % 3050:3200
 subplot(6,1,2)
-plot(comb_mtx_NaN0{layer}(ii+1,1:5000)*2,'r');   % 3050:3200
+plot(comb_mtx_NaN0{layer}(ii+1,1:5000)*fold,'r');   % 3050:3200
 hold on, plot(comb_mtx_NaN0{layer}(feature,1:5000),'b');   % 3050:3200
 subplot(6,1,3)
-plot(comb_mtx_NaN0{layer}(ii+2,1:5000)*2,'r');   % 3050:3200
+plot(comb_mtx_NaN0{layer}(ii+2,1:5000)*fold,'r');   % 3050:3200
 hold on, plot(comb_mtx_NaN0{layer}(feature,1:5000),'b');   % 3050:3200
 subplot(6,1,4)
-plot(comb_mtx_NaN0{layer}(ii+3,1:5000)*2,'r');   % 3050:3200
+plot(comb_mtx_NaN0{layer}(ii+3,1:5000)*fold,'r');   % 3050:3200
 hold on, plot(comb_mtx_NaN0{layer}(feature,1:5000),'b');   % 3050:3200
 subplot(6,1,5)
-plot(comb_mtx_NaN0{layer}(ii+4,1:5000)*2,'r');   % 3050:3200
+plot(comb_mtx_NaN0{layer}(ii+4,1:5000)*fold,'r');   % 3050:3200
 hold on, plot(comb_mtx_NaN0{layer}(feature,1:5000),'b');   % 3050:3200
 
 subplot(6,1,6)

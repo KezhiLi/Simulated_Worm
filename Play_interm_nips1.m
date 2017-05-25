@@ -5,12 +5,18 @@
 %
 %  14/02/2017 Kezhi Li @Imperial College, CSC, MRC
 
+addpath('X:\Kezhi\fastICA');
+addpath('C:\Kezhi\MyCode!!!\Simulated_Worm\Test_Eric\');
+
 % strain name
 stain =  'N2';
-cur_folder = ['Z:\DLWeights\eig_catagory_Straits\',stain,'\'];
 % the hdf5 file storages the c matrices
-strain_name =  'N2 on food L_2011_03_17__11_34_06___7___3';
-%'N2 on food L_2011_02_17__12_51_07___7___7';
+%strain_name =  'N2 on food L_2011_03_24__12_06_06___1___1';
+strain_name = 'N2 on food L_2011_03_17__11_34_06___7___3';  % this one good
+
+% current folder
+cur_folder = ['Z:\DLWeights\eig_catagory_Straits\',stain,'\',strain_name,'\'];
+%'N2 on food L_2011_03_17__11_34_06___7___3';
 name = ['interm_',strain_name,'_eig_7-260-260-260-260-7_600ep.hdf5'];
 feature_name = [strain_name,'_features.hdf5'];
 hdf5_file_name = [cur_folder,name];
@@ -42,8 +48,7 @@ nan_idx = h5read(hdf5_file_name,'/nan_idx');
 %c_L = [c_L0_col;c_L1_col;c_L3_col;c_L5_col];
 
 
-addpath('X:\Kezhi\fastICA');
-addpath('C:\Kezhi\MyCode!!!\Simulated_Worm\Test_Eric\');
+
 
 for nf = 1  %num_csv;  % 476
     disp(name)
@@ -116,26 +121,30 @@ for nf = 1  %num_csv;  % 476
     [Xrecon, Yrecon] = addRBMRotMat(Xtil, Ytil, XCMrecon, YCMrecon, ...
         THETArecon, XCM, YCM, THETA);
     
-%     %% plot a movie of worm with motion back in
+%     % plot a movie of worm with motion back in
 %     for ii = 3000:1:3800  %1: size(Xrecon,1) % only plotting every 10 frames to speed up movie 
 %         
 %                 subplot(5,4,[13,14])
 %                 imshow(reshape(c_L{1}(:,ii),13,20))
+%                 title('1st layer')
 %                 caxis([-3,3])
 %                 colorbar
 %                 subplot(5,4,[15,16])
 %                 imshow(reshape(c_L{2}(:,ii),13,20))
+%                 title('2nd layer')
 %                 caxis([-1.5,1.5])
-%               %  colorbar
+%                 colorbar
 %                 subplot(5,4,[17,18])
 %                 imshow(reshape(c_L{3}(:,ii),13,20))
+%                 title('3rd layer')
 %                 caxis([-1.5,1.5])
-%               %  colorbar
+%                 colorbar
 %                 subplot(5,4,[19,20])
 %                 imshow(reshape(c_L{4}(:,ii),13,20))
+%                 title('4th layer')
 %                 caxis([-1.5,1.5])
 %         colormap jet
-%                % colorbar
+%                 colorbar
 %         
 % %                 hp4 = get(subplot(5,4,20),'Position');
 % %                 colorbar('Position', [hp4(1)+hp4(3)+0.01  hp4(2)  0.1  hp4(2)+hp4(3)*1.1])
@@ -157,7 +166,7 @@ for nf = 1  %num_csv;  % 476
 %         cc0 = ['The feature''s value is: ',num2str(fea_val)];
 %         text(1860,1250,cc0);
 %         cc1=['Index of the neuron is (',num2str(idx),')'];
-%         text(1860,-100,cc1);
+%         text(1860,-400,cc1);
 %         cc2=['The neuron''c value is: ',num2str(neu_val)];
 %         text(1860,1100,cc2);
 %         subplot(5,4,8)
@@ -185,7 +194,7 @@ end
 subsample_step = 3;
 fea_timeseries_subs = fea_timeseries_all(:,1:subsample_step:end); 
 % abandon the NaN that have been abandoned previously
-fea_timeseries_subs_noNaN = fea_timeseries_subs(setdiff(1:size(fea_timeseries_subs,2),nan_idx));
+fea_timeseries_subs_noNaN = fea_timeseries_subs(:,setdiff(1:size(fea_timeseries_subs,2),nan_idx));
 % find the start index
 idx_timeseries = size(fea_timeseries_subs_noNaN,2)- size(c_L{1},2)+1;
 %idx_timeseries = length(fea_timeseries_subs_noNaN)*0.1+50;
@@ -219,10 +228,10 @@ for ii = 1:4;
     %  R_largeEntry{ii}(1:56,1:56)=0;
     %  R_largeEntry{ii}(57:end,57:end)=0;
     
-    for jj = 1:size(comb_mtx_NaN0{ii},1)
-        comb_mtx_NaN0{ii}(jj,:) = comb_mtx_NaN0{ii}(jj,:)-mean(comb_mtx_NaN0{ii}(jj,:));
-        comb_mtx_NaN0{ii}(jj,:) = comb_mtx_NaN0{ii}(jj,:)/std(comb_mtx_NaN0{ii}(jj,:));
-    end
+%     for jj = 1:size(comb_mtx_NaN0{ii},1)
+%         comb_mtx_NaN0{ii}(jj,:) = comb_mtx_NaN0{ii}(jj,:)-mean(comb_mtx_NaN0{ii}(jj,:));
+%         comb_mtx_NaN0{ii}(jj,:) = comb_mtx_NaN0{ii}(jj,:)/std(comb_mtx_NaN0{ii}(jj,:));
+%     end
 end
 
 comb_mtx2 = cell(4,1);
@@ -240,10 +249,10 @@ for ii = 1:4;
     %  R_largeEntry{ii}(1:56,1:56)=0;
     %  R_largeEntry{ii}(57:end,57:end)=0;
     
-    for jj = 1:size(comb_mtx2_NaN0{ii},1)
-        comb_mtx2_NaN0{ii}(jj,:) = comb_mtx2_NaN0{ii}(jj,:)-mean(comb_mtx2_NaN0{ii}(jj,:));
-        comb_mtx2_NaN0{ii}(jj,:) = comb_mtx2_NaN0{ii}(jj,:)/std(comb_mtx2_NaN0{ii}(jj,:));
-    end
+%     for jj = 1:size(comb_mtx2_NaN0{ii},1)
+%         comb_mtx2_NaN0{ii}(jj,:) = comb_mtx2_NaN0{ii}(jj,:)-mean(comb_mtx2_NaN0{ii}(jj,:));
+%         comb_mtx2_NaN0{ii}(jj,:) = comb_mtx2_NaN0{ii}(jj,:)/std(comb_mtx2_NaN0{ii}(jj,:));
+%     end
 end
 
 % for ii =1:56;

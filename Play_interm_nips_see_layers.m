@@ -124,18 +124,22 @@ for nf = 1  %num_csv;  % 476
                 subplot(5,4,[13,14])
                 imshow(reshape(c_L{1}(:,ii),13,20))
                 caxis([-3,3])
+                title('1st layer')
             %    colorbar
                 subplot(5,4,[15,16])
                 imshow(reshape(c_L{2}(:,ii),13,20))
                 caxis([-1.5,1.5])
+                title('2nd layer')
             %    colorbar
                 subplot(5,4,[17,18])
                 imshow(reshape(c_L{3}(:,ii),13,20))
                 caxis([-1.5,1.5])
+                title('3rd layer')
             %    colorbar
                 subplot(5,4,[19,20])
                 imshow(reshape(c_L{4}(:,ii),13,20))
                 caxis([-1.5,1.5])
+                title('4th layer')
        % colormap jet
             %    colorbar
         
@@ -153,14 +157,15 @@ for nf = 1  %num_csv;  % 476
         axis equal
         xlim([ min(min(Xrecon - Xrecon(1, 1))), max(max(Xrecon - Xrecon(1, 1)))])
         ylim([ min(min(Yrecon - Yrecon(1, 1))), max(max(Yrecon - Yrecon(1, 1)))])
+        title('worm behaviour')
         hold off
         
         fea_val = fea_timeseries_show(idx_feature,ii);
-        cc0 = sprintf(['The feature''s value is: \n ',num2str(fea_val)]);
+        cc0 = sprintf(['The feature''s is: \n ',num2str(fea_val)]);
         text(1660,1650,cc0);
-        cc1=sprintf(['Index of the neuron is: \n(',num2str(idx),')']);
+        cc1=sprintf(['Neuron index is: \n(',num2str(idx),')']);
         text(1660,-400,cc1);
-        cc2=sprintf(['The neuron''c value is: \n',num2str(neu_val)]);
+        cc2=sprintf(['The neuron''s  is: \n',num2str(neu_val)]);
         text(1660,1100,cc2);
         subplot(5,4,8)
         imshow(c_L{idx(1)}((idx(1)-1)*260+idx(2),ii))

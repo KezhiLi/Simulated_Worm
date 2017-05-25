@@ -5,11 +5,11 @@ a = 1;
 
 layer= 1;
 feature = 39; % 39: middle speed; 13: midbody bend
-for ii =  255 % 57:1:316;
+for ii =  284 % 57:1:316;
     figure, plot(comb_mtx_NaN0{layer}(feature,:),'r'),   % 3050:6700
     hold on,   
 %    plot(comb_mtx_NaN0{1}(43,5000:6000),'m'), 
-    plot(comb_mtx_NaN0{layer}(ii,:)) %3050:6700
+    plot(comb_mtx_NaN0{layer}(ii,:)*sqrt(norm(comb_mtx_NaN0{layer}(feature,:)))) %3050:6700
   %  axis([0,650,-5,5])
    
 %     figure, plot(comb_mtx_NaN0{layer}(feature,:),'r'), %4050:4700
@@ -25,7 +25,7 @@ for ii =  255 % 57:1:316;
 %  %   axis([0,650,-5,5])
 
     y0 = filter(b,a,comb_mtx_NaN0{layer}(feature,:)); %3050:6700 
-    y = filter(b,a,comb_mtx_NaN0{layer}(ii,:));%3050:6700
+    y = filter(b,a,comb_mtx_NaN0{layer}(ii,:)*sqrt(norm(comb_mtx_NaN0{layer}(feature,:))));%3050:6700
 
     figure, plot(y0,'r'), 
     hold on,  
